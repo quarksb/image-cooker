@@ -4,7 +4,7 @@ import{t as se}from"./vendor.eab43d9c.js";const le=function(){const e=document.c
 [[block]] struct VertexOutput {
     [[builtin(position)]] Position: vec4<f32>;
     [[location(0)]] fragUV: vec2<f32>;
-}
+};
 
 let pos = array<vec2<f32>, 6>(
     vec2<f32>(1.0, 1.0),
@@ -41,7 +41,8 @@ fn frag_main([[location(0)]] fragUV: vec2<f32>) -> [[location(0)]] vec4<f32> {
 `,de=`[[block]] struct Unifroms{
     angle: f32;
     center: vec2<f32>;
-}
+};
+
 [[group(0) ,binding(0)]] var mySampler: sampler;
 [[group(0) ,binding(1)]] var myTexture: texture_2d<f32>;
 [[group(1) ,binding(0)]] var<uniform> uniforms: Unifroms;
@@ -64,7 +65,7 @@ fn frag_main([[location(0)]] fragUV: vec2<f32>) -> [[location(0)]] vec4<f32> {
     ratio: f32;
     seed: f32;
     granularity: f32;
-}
+};
 
 [[group(0) ,binding(0)]] var mySampler: sampler;
 [[group(0) ,binding(1)]] var myTexture: texture_2d<f32>;
@@ -123,7 +124,7 @@ fn frag_main([[location(0)]] fragUV: vec2<f32>) -> [[location(0)]] vec4<f32> {
 }`;let B,R,j,f,W,_;async function pe(){const t=await L();B=document.createElement("canvas"),R=B.getContext("webgpu"),j=t.adapter,f=t.device,W=R.getPreferredFormat(j);const e=M({device:f,code:z,fragCode:me}),r=f.createSampler({magFilter:"linear",minFilter:"linear"}),a=C(f,new Float32Array(new Array(3)),GPUBufferUsage.UNIFORM|GPUBufferUsage.COPY_DST);_=({source:n,ratio:o,seed:s,granularity:g})=>{const{width:c,height:p}=n;B.width=c,B.height=p;const v=ee(f,c,p);f.queue.copyExternalImageToTexture({source:n},{texture:v},{width:c,height:p});const y=1,T=[B.width*y,B.height*y];R.configure({device:f,format:W,size:T}),f.queue.writeBuffer(a,0,new Float32Array([o,s,g]));const A=f.createBindGroup({layout:e.getBindGroupLayout(0),entries:[{binding:0,resource:r},{binding:1,resource:v.createView()}]}),b=f.createBindGroup({layout:e.getBindGroupLayout(1),entries:[{binding:0,resource:{buffer:a}}]}),m=f.createCommandEncoder(),x=q(m,R);x.setPipeline(e),x.setBindGroup(0,A),x.setBindGroup(1,b),x.draw(6),x.end(),f.queue.submit([m?.finish()])}}async function ve(t,{value:e=0,seed:r=0,granularity:a=50}){return isNaN(e)?t:(_||await pe(),_({source:t,ratio:e,seed:r,granularity:a}),B)}var ye=`[[block]] struct Unifroms{
     sigma: f32;
     canvasSize: vec2<f32>; // \u56FE\u7247\u5927\u5C0F
-}
+};
 
 
 // \u5377\u79EF\u8303\u56F4 k \u4E3A\u6807\u51C6\u5DEE\u7CFB\u6570 r = k * sigma, \u533A\u95F4\uFF08\u03BC-3\u03C3, \u03BC+3\u03C3\uFF09\u5185\u7684\u9762\u79EF\u4E3A99.73%, \u6240\u4EE5\u5377\u79EF\u8303\u56F4\u4E00\u822C\u53D6 3
