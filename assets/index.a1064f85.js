@@ -2,8 +2,8 @@ import{t as se}from"./vendor.eab43d9c.js";const le=function(){const e=document.c
 [[group(0), binding(1)]] var myTexture: texture_2d<f32>;
 
 [[block]] struct VertexOutput {
-    @builtin(position) Position: vec4<f32>;
-    @location(0) fragUV: vec2<f32>;
+    [[builtin(position)]] Position: vec4<f32>;
+    [[location(0)]] fragUV: vec2<f32>;
 }
 
 let pos = array<vec2<f32>, 6>(
@@ -24,16 +24,16 @@ let uv = array<vec2<f32>, 6>(
     vec2<f32>(0.0, 0.0)
 );
 
-@stage(vertex)
-fn vert_main(@builtin(vertex_index) VertexIndex: u32) -> VertexOutput {
+[[stage(vertex)]]
+fn vert_main([[builtin(vertex_index)]] VertexIndex: u32) -> VertexOutput {
     var output: VertexOutput;
     output.Position = vec4<f32>(pos[VertexIndex], 0.0, 1.0);
     output.fragUV = uv[VertexIndex];
     return output;
 }
 
-@stage(fragment)
-fn frag_main(@location(0) fragUV: vec2<f32>) -> @location(0) vec4<f32> {
+[[stage(fragment)]]
+fn frag_main([[location(0)]] fragUV: vec2<f32>) -> [[location(0)]] vec4<f32> {
     let rgba = textureSample(myTexture, mySampler, fragUV);
     return rgba;
 }
@@ -45,8 +45,8 @@ fn frag_main(@location(0) fragUV: vec2<f32>) -> @location(0) vec4<f32> {
 [[group(0) ,binding(0)]] var mySampler: sampler;
 [[group(0) ,binding(1)]] var myTexture: texture_2d<f32>;
 [[group(1) ,binding(0)]] var<uniform> uniforms: Unifroms;
-@stage(fragment)
-fn frag_main(@location(0) fragUV: vec2<f32>) -> @location(0) vec4<f32> {
+[[stage(fragment)]]
+fn frag_main([[location(0)]] fragUV: vec2<f32>) -> [[location(0)]] vec4<f32> {
     let center = uniforms.center;
     // let center = vec2<f32>(0.5, 0.5);
     let uv0 = fragUV - center;
@@ -107,8 +107,8 @@ fn fbm(st:vec2<f32>)->f32 {
     return value;
 }
 
-@stage(fragment)
-fn frag_main(@location(0) fragUV: vec2<f32>) -> @location(0) vec4<f32> {
+[[stage(fragment)]]
+fn frag_main([[location(0)]] fragUV: vec2<f32>) -> [[location(0)]] vec4<f32> {
     let uv = fragUV;
     let rgba = textureSample(myTexture, mySampler, uv);
 
@@ -134,7 +134,7 @@ let maxKernelSize = 1000.0;
 [[group(1), binding(0)]] var<uniform> uniforms: Unifroms;
 [[group(2), binding(0)]] var<uniform> direction: vec2<f32>;
 [[stage(fragment)]]
-fn frag_main(@location(0) fragUV: vec2<f32>) -> @location(0) vec4<f32> {
+fn frag_main([[location(0)]] fragUV: vec2<f32>) -> [[location(0)]] vec4<f32> {
     let uv = fragUV;
     let kernelRadius = uniforms.sigma * k;
     let scale2X = -0.5 / (uniforms.sigma * uniforms.sigma); // \u540E\u7EED\u9AD8\u65AF\u8868\u8FBE\u5F0F\u4E2D\u4F7F\u7528
