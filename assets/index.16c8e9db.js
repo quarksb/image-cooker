@@ -1,5 +1,5 @@
-import{t as ce}from"./vendor.eab43d9c.js";const le=function(){const e=document.createElement("link").relList;if(e&&e.supports&&e.supports("modulepreload"))return;for(const n of document.querySelectorAll('link[rel="modulepreload"]'))a(n);new MutationObserver(n=>{for(const o of n)if(o.type==="childList")for(const c of o.addedNodes)c.tagName==="LINK"&&c.rel==="modulepreload"&&a(c)}).observe(document,{childList:!0,subtree:!0});function r(n){const o={};return n.integrity&&(o.integrity=n.integrity),n.referrerpolicy&&(o.referrerPolicy=n.referrerpolicy),n.crossorigin==="use-credentials"?o.credentials="include":n.crossorigin==="anonymous"?o.credentials="omit":o.credentials="same-origin",o}function a(n){if(n.ep)return;n.ep=!0;const o=r(n);fetch(n.href,o)}};le();let F,P;async function k(){if(P)return{adapter:F,device:P};try{F=await navigator.gpu.requestAdapter(),P=await F.requestDevice()}catch{alert("your browser don\u2018t support webgpu")}return{adapter:F,device:P}}function C(t,e,r=GPUBufferUsage.STORAGE){const a={size:e.byteLength+3&-4,usage:r,mappedAtCreation:!0},n=t.createBuffer(a),o=n.getMappedRange();return(e instanceof Uint32Array?new Uint32Array(o):new Float32Array(o)).set(e),n.unmap(),n}function M({device:t,code:e,fragCode:r,layout:a,format:n,vertexEntryPoint:o,vertexBuffers:c,fragEntryPoint:g,primitive:s}){const p={layout:a,vertex:{module:t.createShaderModule({code:e}),entryPoint:o||"vert_main",buffers:c},fragment:{module:t.createShaderModule({code:r||e}),entryPoint:g||"frag_main",targets:[{format:n||"bgra8unorm"}]},primitive:s||{topology:"triangle-list",frontFace:"ccw",cullMode:"none"}};return t.createRenderPipeline(p)}function ee(t,e=1,r=1,a="rgba8unorm",n=GPUTextureUsage.COPY_DST|GPUTextureUsage.STORAGE_BINDING|GPUTextureUsage.TEXTURE_BINDING|GPUTextureUsage.RENDER_ATTACHMENT){return t.createTexture({size:{width:e,height:r},format:a,usage:n})}function q(t,e){return t.beginRenderPass({colorAttachments:[{view:e.getCurrentTexture().createView(),loadOp:"load",storeOp:"store"}]})}var z=`@group(0) @binding(0) var mySampler: sampler;
-@group(0) @binding(1) var myTexture: texture_2d<f32>;
+import{t as ce}from"./vendor.eab43d9c.js";const le=function(){const e=document.createElement("link").relList;if(e&&e.supports&&e.supports("modulepreload"))return;for(const n of document.querySelectorAll('link[rel="modulepreload"]'))a(n);new MutationObserver(n=>{for(const o of n)if(o.type==="childList")for(const c of o.addedNodes)c.tagName==="LINK"&&c.rel==="modulepreload"&&a(c)}).observe(document,{childList:!0,subtree:!0});function r(n){const o={};return n.integrity&&(o.integrity=n.integrity),n.referrerpolicy&&(o.referrerPolicy=n.referrerpolicy),n.crossorigin==="use-credentials"?o.credentials="include":n.crossorigin==="anonymous"?o.credentials="omit":o.credentials="same-origin",o}function a(n){if(n.ep)return;n.ep=!0;const o=r(n);fetch(n.href,o)}};le();let F,P;async function k(){if(P)return{adapter:F,device:P};try{F=await navigator.gpu.requestAdapter(),P=await F.requestDevice()}catch{alert("your browser don\u2018t support webgpu")}return{adapter:F,device:P}}function C(t,e,r=GPUBufferUsage.STORAGE){const a={size:e.byteLength+3&-4,usage:r,mappedAtCreation:!0},n=t.createBuffer(a),o=n.getMappedRange();return(e instanceof Uint32Array?new Uint32Array(o):new Float32Array(o)).set(e),n.unmap(),n}function M({device:t,code:e,fragCode:r,layout:a,format:n,vertexEntryPoint:o,vertexBuffers:c,fragEntryPoint:g,primitive:s}){const p={layout:a,vertex:{module:t.createShaderModule({code:e}),entryPoint:o||"vert_main",buffers:c},fragment:{module:t.createShaderModule({code:r||e}),entryPoint:g||"frag_main",targets:[{format:n||"bgra8unorm"}]},primitive:s||{topology:"triangle-list",frontFace:"ccw",cullMode:"none"}};return t.createRenderPipeline(p)}function ee(t,e=1,r=1,a="rgba8unorm",n=GPUTextureUsage.COPY_DST|GPUTextureUsage.STORAGE_BINDING|GPUTextureUsage.TEXTURE_BINDING|GPUTextureUsage.RENDER_ATTACHMENT){return t.createTexture({size:{width:e,height:r},format:a,usage:n})}function q(t,e){return t.beginRenderPass({colorAttachments:[{view:e.getCurrentTexture().createView(),loadOp:"load",storeOp:"store"}]})}var z=`[[group(0), binding(0)]] var mySampler: sampler;
+[[group(0), binding(1)]] var myTexture: texture_2d<f32>;
 
 struct VertexOutput {
     @builtin(position) Position: vec4<f32>;
@@ -42,9 +42,9 @@ fn frag_main(@location(0) fragUV: vec2<f32>) -> @location(0) vec4<f32> {
     angle: f32;
     center: vec2<f32>;
 }
-@group(0) @binding(0) var mySampler: sampler;
-@group(0) @binding(1) var myTexture: texture_2d<f32>;
-@group(1) @binding(0) var<uniform> uniforms: Unifroms;
+[[group(0) ,binding(0)]] var mySampler: sampler;
+[[group(0) ,binding(1)]] var myTexture: texture_2d<f32>;
+[[group(1) ,binding(0)]] var<uniform> uniforms: Unifroms;
 @stage(fragment)
 fn frag_main(@location(0) fragUV: vec2<f32>) -> @location(0) vec4<f32> {
     let center = uniforms.center;
@@ -66,9 +66,9 @@ fn frag_main(@location(0) fragUV: vec2<f32>) -> @location(0) vec4<f32> {
     granularity: f32;
 }
 
-@group(0) @binding(0) var mySampler: sampler;
-@group(0) @binding(1) var myTexture: texture_2d<f32>;
-@group(1) @binding(0) var<uniform> uniforms: Unifroms;
+[[group(0) ,binding(0)]] var mySampler: sampler;
+[[group(0) ,binding(1)]] var myTexture: texture_2d<f32>;
+[[group(1) ,binding(0)]] var<uniform> uniforms: Unifroms;
 
 fn random(st:vec2<f32>)->f32 {
     return fract(sin(uniforms.seed + dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
@@ -129,11 +129,11 @@ fn frag_main(@location(0) fragUV: vec2<f32>) -> @location(0) vec4<f32> {
 // \u5377\u79EF\u8303\u56F4 k \u4E3A\u6807\u51C6\u5DEE\u7CFB\u6570 r = k * sigma, \u533A\u95F4\uFF08\u03BC-3\u03C3, \u03BC+3\u03C3\uFF09\u5185\u7684\u9762\u79EF\u4E3A99.73%, \u6240\u4EE5\u5377\u79EF\u8303\u56F4\u4E00\u822C\u53D6 3
 let k = 3.0;
 let maxKernelSize = 1000.0;
-@group(0) @binding(0) var mySampler: sampler;
-@group(0) @binding(1) var myTexture: texture_2d<f32>;
-@group(1) @binding(0) var<uniform> uniforms: Unifroms;
-@group(2) @binding(0) var<uniform> direction: vec2<f32>;
-@stage(fragment)
+[[group(0), binding(0)]] var mySampler: sampler;
+[[group(0), binding(1)]] var myTexture: texture_2d<f32>;
+[[group(1), binding(0)]] var<uniform> uniforms: Unifroms;
+[[group(2), binding(0)]] var<uniform> direction: vec2<f32>;
+[[stage(fragment)]]
 fn frag_main(@location(0) fragUV: vec2<f32>) -> @location(0) vec4<f32> {
     let uv = fragUV;
     let kernelRadius = uniforms.sigma * k;
