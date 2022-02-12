@@ -60,7 +60,7 @@ fn frag_main([[location(0)]] fragUV: vec2<f32>) -> [[location(0)]] vec4<f32> {
     let uv = matrix2 * uv0 + center;
     let rgba = textureSample(myTexture, mySampler, uv);
     // wgpu bug ?
-    return vec4(rgba.rgb * rgba.a, rgba.a);
+    return vec4<f32>(rgba.rgb * rgba.a, rgba.a);
 }`;let h,I,H,d,K,V;async function fe(){const t=await L();h=document.createElement("canvas"),I=h.getContext("webgpu"),H=t.adapter,d=t.device,K=I.getPreferredFormat(H);const e=M({device:d,code:z,fragCode:de}),r=d.createSampler({magFilter:"linear",minFilter:"linear"}),a=C(d,new Float32Array([0,0,0,0]),GPUBufferUsage.UNIFORM|GPUBufferUsage.COPY_DST);V=({source:n,value:o,center:s})=>{const{width:g,height:c}=n;h.width=g,h.height=c;const p=ee(d,g,c);d.queue.copyExternalImageToTexture({source:n},{texture:p},{width:g,height:c});const v=1,y=[h.width*v,h.height*v];I.configure({device:d,format:K,size:y}),d.queue.writeBuffer(a,0,new Float32Array([o,0,...s]));const T=d.createBindGroup({layout:e.getBindGroupLayout(0),entries:[{binding:0,resource:r},{binding:1,resource:p.createView()}]}),A=d.createBindGroup({layout:e.getBindGroupLayout(1),entries:[{binding:0,resource:{buffer:a}}]}),b=d.createCommandEncoder(),m=q(b,I);m.setPipeline(e),m.setBindGroup(0,T),m.setBindGroup(1,A),m.draw(6),m.end(),d.queue.submit([b?.finish()])}}async function ge(t,{value:e,center:r}){return isNaN(e)?t:(V||await fe(),V({source:t,value:e*Math.PI/36,center:[r.x/200+.5,r.y/200+.5]}),h)}var me=`[[block]] struct Unifroms{
     ratio: f32;
     seed: f32;
@@ -72,7 +72,7 @@ fn frag_main([[location(0)]] fragUV: vec2<f32>) -> [[location(0)]] vec4<f32> {
 [[group(1) ,binding(0)]] var<uniform> uniforms: Unifroms;
 
 fn random(st:vec2<f32>)->f32 {
-    return fract(sin(uniforms.seed + dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
+    return fract(sin(uniforms.seed + dot(st.xy, vec2<f32>(12.9898, 78.233))) * 43758.5453123);
 }
 
 // Based on Morgan McGuire @morgan3d
@@ -83,9 +83,9 @@ fn noise(st:vec2<f32>)->f32 {
 
     // Four corners in 2D of a tile
     let a = random(i);
-    let b = random(i + vec2(1.0, 0.0));
-    let c = random(i + vec2(0.0, 1.0));
-    let d = random(i + vec2(1.0, 1.0));
+    let b = random(i + vec2<f32>(1.0, 0.0));
+    let c = random(i + vec2<f32>(0.0, 1.0));
+    let d = random(i + vec2<f32>(1.0, 1.0));
 
     let u = f * f * (3.0 - 2.0 * f);
 
@@ -118,9 +118,9 @@ fn frag_main([[location(0)]] fragUV: vec2<f32>) -> [[location(0)]] vec4<f32> {
 
     let k = 1. - (1. - value) * 0.01 * uniforms.ratio;
     if(value > uniforms.ratio * 0.01) {
-        return vec4(0.);
+        return vec4<f32>(0.);
     }
-    return vec4(rgba.rgb, rgba.a);
+    return vec4<f32>(rgba.rgb, rgba.a);
 }`;let B,R,j,f,W,_;async function pe(){const t=await L();B=document.createElement("canvas"),R=B.getContext("webgpu"),j=t.adapter,f=t.device,W=R.getPreferredFormat(j);const e=M({device:f,code:z,fragCode:me}),r=f.createSampler({magFilter:"linear",minFilter:"linear"}),a=C(f,new Float32Array(new Array(3)),GPUBufferUsage.UNIFORM|GPUBufferUsage.COPY_DST);_=({source:n,ratio:o,seed:s,granularity:g})=>{const{width:c,height:p}=n;B.width=c,B.height=p;const v=ee(f,c,p);f.queue.copyExternalImageToTexture({source:n},{texture:v},{width:c,height:p});const y=1,T=[B.width*y,B.height*y];R.configure({device:f,format:W,size:T}),f.queue.writeBuffer(a,0,new Float32Array([o,s,g]));const A=f.createBindGroup({layout:e.getBindGroupLayout(0),entries:[{binding:0,resource:r},{binding:1,resource:v.createView()}]}),b=f.createBindGroup({layout:e.getBindGroupLayout(1),entries:[{binding:0,resource:{buffer:a}}]}),m=f.createCommandEncoder(),x=q(m,R);x.setPipeline(e),x.setBindGroup(0,A),x.setBindGroup(1,b),x.draw(6),x.end(),f.queue.submit([m?.finish()])}}async function ve(t,{value:e=0,seed:r=0,granularity:a=50}){return isNaN(e)?t:(_||await pe(),_({source:t,ratio:e,seed:r,granularity:a}),B)}var ye=`[[block]] struct Unifroms{
     sigma: f32;
     canvasSize: vec2<f32>; // \u56FE\u7247\u5927\u5C0F
@@ -169,6 +169,6 @@ fn frag_main([[location(0)]] fragUV: vec2<f32>) -> [[location(0)]] vec4<f32> {
 
     let sb = textureSample(myTexture, mySampler, uv);
     // let color = sb;
-    let color = clamp(rgba / weightSum, vec4(0.), vec4(1.));
+    let color = clamp(rgba / weightSum, vec4<f32>(0.), vec4<f32>(1.));
     return color;
 }`;let U,D,J,i,N,k;async function be(){const t=await L();U=document.createElement("canvas"),D=U.getContext("webgpu"),J=t.adapter,i=t.device,N=D.getPreferredFormat(J);const e=M({device:i,code:z,fragCode:ye}),r=i.createSampler({magFilter:"linear",minFilter:"linear"}),a=C(i,new Float32Array(new Array(4)),GPUBufferUsage.UNIFORM|GPUBufferUsage.COPY_DST),n=C(i,new Float32Array([1,0,0,0]),GPUBufferUsage.UNIFORM),o=C(i,new Float32Array([0,1,0,0]),GPUBufferUsage.UNIFORM),s=i.createBindGroup({layout:e.getBindGroupLayout(2),entries:[{binding:0,resource:{buffer:n}}]}),g=i.createBindGroup({layout:e.getBindGroupLayout(2),entries:[{binding:0,resource:{buffer:o}}]});k=({source:c,blur:p})=>{const{width:v,height:y}=c;U.width=v,U.height=y;const T=1,A=[U.width*T,U.height*T],b={width:v,height:y},m=i.createTexture({size:b,format:N,usage:GPUTextureUsage.RENDER_ATTACHMENT|GPUTextureUsage.COPY_SRC|GPUTextureUsage.COPY_DST|GPUTextureUsage.TEXTURE_BINDING}),x=i.createTexture({size:b,format:N,usage:GPUTextureUsage.RENDER_ATTACHMENT|GPUTextureUsage.COPY_SRC|GPUTextureUsage.TEXTURE_BINDING});i.queue.copyExternalImageToTexture({source:c},{texture:m},b),D.configure({device:i,format:N,size:A});const ie={colorAttachments:[{view:x.createView(),loadOp:"load",storeOp:"store"}]};i.queue.writeBuffer(a,0,new Float32Array([p,0,v,y]));const ue=i.createBindGroup({layout:e.getBindGroupLayout(0),entries:[{binding:0,resource:r},{binding:1,resource:m.createView()}]}),ce=i.createBindGroup({layout:e.getBindGroupLayout(0),entries:[{binding:0,resource:r},{binding:1,resource:x.createView()}]}),X=i.createBindGroup({layout:e.getBindGroupLayout(1),entries:[{binding:0,resource:{buffer:a}}]}),O=i.createCommandEncoder();let l=O.beginRenderPass(ie);l.setPipeline(e),l.setBindGroup(0,ue),l.setBindGroup(1,X),l.setBindGroup(2,s),l.draw(6),l.end(),l=q(O,D),l.setPipeline(e),l.setBindGroup(0,ce),l.setBindGroup(1,X),l.setBindGroup(2,g),l.draw(6),l.end(),i.queue.submit([O.finish()])}}async function xe(t,{value:e=0}){return isNaN(e)?t:(k||await be(),k({source:t,blur:e}),U)}const Q=["\u81EA\u5F3A\u4E0D\u606F","\u539A\u5FB7\u8F7D\u7269","\u7CBE\u76CA\u6C42\u7CBE","\u4E0A\u5584\u82E5\u6C34"];async function we(t){if(!t)return;const e=document.createElement("a");t.toBlob(r=>{const a=URL.createObjectURL(r);e.download=`\u5938\u514B${Q[Math.floor(Math.random()*Q.length)]}.png`,e.href=a,e.click()})}function he(t){return new Promise(e=>{const r=new FileReader;r.readAsDataURL(t),r.onload=a=>{const n=a?.target?.result;e({url:n})}})}const Be={blur:xe,noise:ve,warp:ge},E=document.getElementById("canvas");E.style.maxWidth="1200px";const Ue=1200,Ge=675;E.width=Ue;E.height=Ge;const u={blur:40,warp:100,seed:0,noise:40,granularity:10,center:{x:0,y:0},backgroundColor:"#88ddff"},S=new se.exports.Pane,te=[],Te=S.addFolder({title:"\u80CC\u666F"});te.push(Te.addInput(u,"backgroundColor",{label:"\u80CC\u666F\u8272",view:"color"}));const G=[],Y=S.addFolder({title:"\u6D88\u878D"}),Ee=S.addFolder({title:"\u6A21\u7CCA"}),ne=S.addFolder({title:"\u626D\u66F2"});G.push(Y.addInput(u,"noise",{label:"\u6D88\u878D\u5F3A\u5EA6",min:0,max:100}));G.push(Y.addInput(u,"granularity",{label:"\u6D88\u878D\u7C92\u5EA6",min:0,max:100}));G.push(Y.addInput(u,"seed",{label:"\u6D88\u878D\u79CD\u5B50",min:0,max:1}));G.push(Ee.addInput(u,"blur",{label:"\u6A21\u7CCA\u5F3A\u5EA6",min:0,max:200}));G.push(ne.addInput(u,"warp",{label:"\u626D\u66F2\u5F3A\u5EA6",min:-100,max:100}));G.push(ne.addInput(u,"center",{label:"\u626D\u66F2\u4E2D\u5FC3",picker:"inline",expanded:!0,x:{step:1,min:-100,max:100},y:{step:1,min:-100,max:100}}));const Se=S.addButton({title:"\u4E0A\u4F20\u56FE\u7247"}),Ae=S.addButton({title:"\u4E0B\u8F7D\u56FE\u7247"}),Z=E.getContext("2d");let $,re="https://st0.dancf.com/gaoding-material/0/images/223463/20191107-203725-leuLE.jpg";const w=document.createElement("input");w.type="file";w.accept="image/png";w.style.display="none";w.addEventListener("change",async()=>{if(w.files.length){const{url:t}=await he(w.files[0]);re=t,oe()}});document.body.appendChild(w);Se.on("click",()=>{w.click()});Ae.on("click",()=>{console.log(111),we(canvas)});oe();async function ae(){const{width:t,height:e}=$;E.width=t,E.height=e;const r=[{type:"noise",enable:u.noise>0,params:{value:100-u.noise,seed:u.seed,granularity:u.granularity}},{type:"blur",enable:u.blur>0,params:{value:u.blur,k:0}},{type:"warp",enable:u.warp>0||u.warp<0,params:{value:u.warp,center:u.center}}];let a=$;for(let n=0;n<r.length;n++){const{type:o,enable:s,params:g}=r[n];if(console.time(o),s){const c=Be[o];c&&(a=await c(a,g))}console.timeEnd(o)}Z.clearRect(0,0,t,e),Z.drawImage(a,0,0)}async function oe(){const e=await(await fetch(re)).blob();$=await createImageBitmap(e),ae()}const Ce=document.querySelector("body");te.forEach(t=>{t.on("change",()=>{Ce.style.backgroundColor=u.backgroundColor})});G.forEach(t=>{t.on("change",()=>{ae()})});
